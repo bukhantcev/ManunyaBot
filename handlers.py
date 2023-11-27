@@ -17,6 +17,7 @@ async def go(message: Message):
 @dp.callback_query_handler()
 async def get_file(cb: CallbackQuery):
     try:
+        await cb.answer('На, нахуй!!!')
         name = cb.data
         for folder in os.listdir('materials'):
             if folder == name:
