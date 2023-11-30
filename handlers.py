@@ -29,3 +29,20 @@ async def get_file(cb: CallbackQuery):
 
     except:
         await cb.answer(text="Залупу!")
+
+
+@dp.message_handler()
+async def send_stickers(message:Message):
+    if 'да' in message.text.lower() and 'конечно' in message.text.lower():
+        sticker = InputFile('stickers/da_konechno.jpg')
+        await message.answer_photo(photo=sticker)
+
+    if 'это моя работа' in message.text.lower():
+        sticker = InputFile('stickers/job.jpg')
+        await message.answer_photo(photo=sticker)
+
+    if 'бублик' in message.text.lower() or 'баблгам' in message.text.lower():
+        sticker = InputFile('stickers/bublik.jpg')
+        await message.answer_photo(photo=sticker)
+
+
