@@ -49,7 +49,7 @@ async def send_stickers(message:Message, state: FSMContext):
         await message.answer_photo(photo=sticker)
 
     if message.text.lower() == 'погода':
-        await message.answer('Где, бля? Только латиницей, пожалуйста!')
+        await message.answer('Где, бля?')
         await NewItem.citi.set()
 
 @dp.message_handler(state=NewItem.citi)
