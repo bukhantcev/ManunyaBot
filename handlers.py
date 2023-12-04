@@ -49,11 +49,15 @@ async def send_stickers(message:Message, state: FSMContext):
         await message.answer_photo(photo=sticker)
 
     if message.text.lower() == 'погода':
+        await message.answer('Где, бля? Только латиницей, пожалуйста!')
         await NewItem.citi.set()
 
 @dp.message_handler(state=NewItem.citi)
-async def send_pogoda(state:FSMContext, message:Message):
-    await message.answer(text=get_pogoda(message.text))
+async def send_pogoda(message:Message, state:FSMContext):
+    try:
+        await message.answer(text=get_pogoda(message.text))
+    except:
+        await message.answer("В душе не ебу где это!!! Нормально напиши!")
     await state.finish()
 
 

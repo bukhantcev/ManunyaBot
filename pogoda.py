@@ -1,10 +1,12 @@
+import pprint
+
 import requests
 
 appid = "de0fdaaacab98bc09e3e5e3504358c50"
 
 
 def get_pogoda(s_city: str):
-    s_city = f"{s_city},RU"
+    s_city = s_city
     city_id = 0
     result = ''
     try:
@@ -36,8 +38,10 @@ def get_pogoda(s_city: str):
                            params={'id': city_id, 'units': 'metric', 'lang': 'ru', 'APPID': appid})
         data = res.json()
         for i in data['list']:
-            result_1 = i['dt_txt'], '{0:+3.0f}'.format(i['main']['temp']), i['weather'][0]['description']
-            result = result + '\n' + f"{' '.join(result_1)}"
+            if i['dt_txt'].split(' ')[1].split(':')[0] == '12':
+                result_1 = i['dt_txt'].split(" ")[0], '{0:+3.0f}'.format(i['main']['temp']), i['weather'][0]['description']
+                result = result + '\n' + f"{' '.join(result_1)}"
+        pprint.pprint(str(data['list'][0]['dt_txt']).split(' ')[1].split(':')[0])
         return result
     except Exception as e:
         print("Exception (forecast):", e)
