@@ -4,6 +4,9 @@ from loader import dp, bot
 from aiogram.types import Message, CallbackQuery
 from keyboards import kb_folders
 from aiogram.types import InputFile
+from pogoda import get_pogoda
+from fsm import NewItem
+from aiogram.dispatcher import FSMContext
 
 
 
@@ -31,8 +34,8 @@ async def get_file(cb: CallbackQuery):
         await cb.answer(text="Залупу!")
 
 
-@dp.message_handler()
-async def send_stickers(message:Message):
+@dp.message_handler(state=None)
+async def send_stickers(message:Message, state: FSMContext):
     if 'да' in message.text.lower() and 'конечно' in message.text.lower():
         sticker = InputFile('stickers/da_konechno.jpg')
         await message.answer_photo(photo=sticker)
@@ -44,5 +47,14 @@ async def send_stickers(message:Message):
     if 'бублик' in message.text.lower() or 'баблгам' in message.text.lower():
         sticker = InputFile('stickers/bublik.jpg')
         await message.answer_photo(photo=sticker)
+
+    if message.text.lower() == 'погода':
+        await NewItem.citi.set()
+
+@dp.message_handler(state=NewItem.citi)
+async def send_pogoda(state:FSMContext, message:Message):
+    await message.answer(text=get_pogoda(message.text))
+    await state.finish()
+
 
 
