@@ -47,5 +47,3 @@ def get_pogoda(s_city: str):
         print("Exception (forecast):", e)
         pass
 
-
-
