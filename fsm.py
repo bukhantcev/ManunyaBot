@@ -8,4 +8,5 @@ class NewItem(StatesGroup):
     citi = State()
     sklad = State()
     sklad_vidacha = State()
+    sklad_delete = State()
 

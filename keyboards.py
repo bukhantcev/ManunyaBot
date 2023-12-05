@@ -16,7 +16,8 @@ vidacha = [
     [InlineKeyboardButton(text='Видосы', callback_data='video')],
     [InlineKeyboardButton(text='Доки всякие', callback_data='document')],
     [InlineKeyboardButton(text='Музыка', callback_data='audio')],
-    [InlineKeyboardButton(text='Голосовухи', callback_data='voice')]
+    [InlineKeyboardButton(text='Голосовухи', callback_data='voice')],
+    [InlineKeyboardButton(text='Выход', callback_data='exit')]
 
 ]
 

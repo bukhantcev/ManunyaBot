@@ -8,6 +8,7 @@ from pogoda import get_pogoda
 from fsm import NewItem
 from aiogram.dispatcher import FSMContext
 from db_config import add_new_worker, get_list, update_list
+import asyncio
 
 
 
@@ -59,15 +60,19 @@ async def send_stickers(message:Message, state: FSMContext):
         await NewItem.sklad.set()
 
     if message.text.lower() == 'выдай базу':
-        await message.answer('Выбирай, ёпта!', reply_markup=kb_vidacha)
+        await message.answer('Ты подергай, а я посмотрю!', reply_markup=kb_vidacha)
         await NewItem.sklad_vidacha.set()
+
+    if message.text.lower() == 'удали':
+        await message.answer('Скопируй и пришли мне название!', reply_markup=None)
+        await NewItem.sklad_delete.set()
 
 
 
 
 
     tg_id = message.from_user.id
-    list_docs = ''
+    list_docs = None
     new_worker = (tg_id, list_docs)
     add_new_worker(new_worker=new_worker)
 
@@ -127,64 +132,80 @@ async def vidacha(cb:CallbackQuery, state:FSMContext):
     column = ''
     if cb.data == 'photo':
         column = 'list_photo'
-        if get_list(tg_id=(cb.from_user.id,), column=column) != None and get_list(tg_id=(cb.from_user.id,),
-                                                                                  column=column) != '':
+        if get_list(tg_id=(cb.from_user.id,), column=column)[0][0] != None and get_list(tg_id=(cb.from_user.id,),
+                                                                                  column=column)[0][0] != '':
             await cb.answer('На, нахуй!!!')
             ids = str(get_list(tg_id=(cb.from_user.id,), column=column)[0][0]).split(', ')
             for id in ids:
                 await bot.send_photo(chat_id=cb.message.chat.id, photo=id, caption=id)
-            await state.finish()
         else:
             await cb.answer('Нет ни хуя тут!!!')
-            await state.finish()
     if cb.data == 'video':
         column = 'list_video'
-        if get_list(tg_id=(cb.from_user.id,), column=column) != None and get_list(tg_id=(cb.from_user.id,),
-                                                                                  column=column) != '':
+        if get_list(tg_id=(cb.from_user.id,), column=column)[0][0] != None and get_list(tg_id=(cb.from_user.id,),
+                                                                                  column=column)[0][0] != '':
             await cb.answer('На, нахуй!!!')
             ids = str(get_list(tg_id=(cb.from_user.id,), column=column)[0][0]).split(', ')
             for id in ids:
                 await bot.send_video(chat_id=cb.message.chat.id, video=id, caption=id)
-            await state.finish()
         else:
-            await cb.answer('Нет ни хуя тут!!!')
-            await state.finish()
+            await cb.answer('Нет тут ни хуя!!!')
     if cb.data == 'document':
         column = 'list_docs'
-        if get_list(tg_id=(cb.from_user.id,), column=column) != None and get_list(tg_id=(cb.from_user.id,),
-                                                                                  column=column) != '':
+        if get_list(tg_id=(cb.from_user.id,), column=column)[0][0] != None and get_list(tg_id=(cb.from_user.id,),
+                                                                                  column=column)[0][0] != '':
             await cb.answer('На, нахуй!!!')
             ids = str(get_list(tg_id=(cb.from_user.id,), column=column)[0][0]).split(', ')
             for id in ids:
                 await bot.send_document(chat_id=cb.message.chat.id, document=id, caption=id)
-            await state.finish()
         else:
-            await cb.answer('Нет ни хуя тут!!!')
-            await state.finish()
+            await cb.answer('Пусто!!!')
     if cb.data == 'audio':
         column = 'list_audio'
-        if get_list(tg_id=(cb.from_user.id,), column=column) != None and get_list(tg_id=(cb.from_user.id,),
-                                                                                  column=column) != '':
+        if get_list(tg_id=(cb.from_user.id,), column=column)[0][0] != None and get_list(tg_id=(cb.from_user.id,),
+                                                                                  column=column)[0][0] != '':
             await cb.answer('На, нахуй!!!')
             ids = str(get_list(tg_id=(cb.from_user.id,), column=column)[0][0]).split(', ')
             for id in ids:
                 await bot.send_audio(chat_id=cb.message.chat.id, audio=id, caption=id)
-            await state.finish()
         else:
-            await cb.answer('Нет ни хуя тут!!!')
-            await state.finish()
+            await cb.answer('Тут зиро, ноль, пусто!!!')
     if cb.data == 'voice':
         column = 'list_voice'
-        if get_list(tg_id=(cb.from_user.id,), column=column) != None and get_list(tg_id=(cb.from_user.id,),
-                                                                                  column=column) != '':
+        if get_list(tg_id=(cb.from_user.id,), column=column)[0][0] != None and get_list(tg_id=(cb.from_user.id,),
+                                                                                  column=column)[0][0] != '':
             await cb.answer('На, нахуй!!!')
             ids = str(get_list(tg_id=(cb.from_user.id,), column=column)[0][0]).split(', ')
             for id in ids:
                 await bot.send_voice(chat_id=cb.message.chat.id, voice=id, caption=id)
-            await state.finish()
         else:
-            await cb.answer('Нет ни хуя тут!!!')
-            await state.finish()
+            await cb.answer('Ты заебал!!!')
+
+    if cb.data == 'exit':
+        await cb.answer('На, нахуй!!!')
+        await bot.send_message(chat_id=cb.message.chat.id, text="Пока!")
+        await bot.delete_message(chat_id=cb.message.chat.id, message_id=cb.message.message_id)
+        await state.finish()
+    await asyncio.sleep(120)
+    await bot.delete_message(chat_id=cb.message.chat.id, message_id=cb.message.message_id)
+    await state.finish()
+
+
+@dp.message_handler(state=NewItem.sklad_delete)
+async def sklad_delete(message:Message, state:FSMContext):
+    list_column = ['list_photo', 'list_docs', 'list_video', 'list_audio', 'list_voice']
+    for column in list_column:
+        list_type = str(get_list(tg_id=(message.from_user.id,), column=column)[0][0]).split(', ')
+        for id in list_type:
+            if message.text == id:
+                list_type.remove(id)
+                new_string = ', '.join(list_type)
+                new_data = (new_string, message.from_user.id)
+                update_list(new_data=new_data, column=column)
+    await message.answer('Удалил))')
+    await state.finish()
+
+
 
 
 
