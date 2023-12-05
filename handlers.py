@@ -187,8 +187,11 @@ async def vidacha(cb:CallbackQuery, state:FSMContext):
         await bot.delete_message(chat_id=cb.message.chat.id, message_id=cb.message.message_id)
         await state.finish()
     await asyncio.sleep(120)
-    await bot.delete_message(chat_id=cb.message.chat.id, message_id=cb.message.message_id)
-    await state.finish()
+    try:
+        await bot.delete_message(chat_id=cb.message.chat.id, message_id=cb.message.message_id)
+        await state.finish()
+    except:
+        pass
 
 
 @dp.message_handler(state=NewItem.sklad_delete)
