@@ -6,4 +6,6 @@ from aiogram.types import Message, CallbackQuery
 
 class NewItem(StatesGroup):
     citi = State()
+    sklad = State()
+    sklad_vidacha = State()
 
