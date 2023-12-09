@@ -10,6 +10,7 @@ from aiogram.dispatcher import FSMContext
 from db_config import add_new_worker, get_list, update_list
 import asyncio
 from translated import get_translator
+from manual import text
 
 
 
@@ -74,6 +75,9 @@ async def send_stickers(message:Message, state: FSMContext):
 
     if 'привет' in message.text.lower() or 'хай' in message.text.lower() or 'всем добра' in message.text.lower() or 'всем бобра' in message.text.lower():
         await message.answer('Привет!')
+
+    if 'help' in message.text.lower():
+        await message.answer(text=text)
 
 
 
