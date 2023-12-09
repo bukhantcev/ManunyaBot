@@ -1,4 +1,5 @@
 import os
+import random
 
 from loader import dp, bot
 from aiogram.types import Message, CallbackQuery
@@ -10,7 +11,7 @@ from aiogram.dispatcher import FSMContext
 from db_config import add_new_worker, get_list, update_list
 import asyncio
 from translated import get_translator
-from manual import text
+from manual import text_help
 
 
 
@@ -74,10 +75,14 @@ async def send_stickers(message:Message, state: FSMContext):
         await NewItem.translated_sl.set()
 
     if 'привет' in message.text.lower() or 'хай' in message.text.lower() or 'всем добра' in message.text.lower() or 'всем бобра' in message.text.lower():
-        await message.answer('Привет!')
+        text_list = ["Привет", "Хеллоу", "Бамжур", "Салам", "Здрасьте", "Ола", "Шумбрат", "Барев", "Добрый"]
+        index = random.randint(0,len(text_list)-1)
+        text = text_list[index]
+
+        await message.answer(text=text)
 
     if 'help' in message.text.lower():
-        await message.answer(text=text)
+        await message.answer(text=text_help)
 
 
 
