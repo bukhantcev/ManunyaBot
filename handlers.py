@@ -2,13 +2,14 @@ import os
 
 from loader import dp, bot
 from aiogram.types import Message, CallbackQuery
-from keyboards import kb_folders, kb_vidacha
+from keyboards import kb_folders, kb_vidacha, kb_translated
 from aiogram.types import InputFile
 from pogoda import get_pogoda
 from fsm import NewItem
 from aiogram.dispatcher import FSMContext
 from db_config import add_new_worker, get_list, update_list
 import asyncio
+from translated import get_translator
 
 
 
@@ -66,6 +67,10 @@ async def send_stickers(message:Message, state: FSMContext):
     if message.text.lower() == 'удали':
         await message.answer('Скопируй и пришли мне название!', reply_markup=None)
         await NewItem.sklad_delete.set()
+
+    if message.text.lower() == 'переведи':
+        await message.answer('Что-куда?', reply_markup=kb_translated)
+        await NewItem.translated_sl.set()
 
 
 
@@ -207,6 +212,34 @@ async def sklad_delete(message:Message, state:FSMContext):
                 update_list(new_data=new_data, column=column)
     await message.answer('Удалил))')
     await state.finish()
+
+
+
+@dp.callback_query_handler(state=NewItem.translated_sl)
+async def get_sl(cb:CallbackQuery, state:FSMContext):
+    data = cb.data
+    await state.update_data({'translated_sl':data})
+    await cb.answer('Куда?')
+    await NewItem.translated_dl.set()
+
+@dp.callback_query_handler(state=NewItem.translated_dl)
+async def get_dl(cb:CallbackQuery, state:FSMContext):
+    data = cb.data
+    await state.update_data({'translated_dl':data})
+    await cb.answer('Отправь текст!')
+    await NewItem.translated_text.set()
+
+@dp.message_handler(state=NewItem.translated_text)
+async def get_text(message:Message, state:FSMContext):
+    sl = await state.get_data()
+    dl = await state.get_data()
+    sl = sl.get('translated_sl')
+    dl = str(dl.get('translated_dl')).split('_')[0]
+    text = message.text
+    await message.answer(text=get_translator(sl, dl, text))
+    await state.finish()
+
+
 
 
 

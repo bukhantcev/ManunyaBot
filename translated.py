@@ -12,6 +12,7 @@ def get_translator(sl:str, dl:str, text:str):
     res = requests.get(f'https://ftapi.pythonanywhere.com/translate?sl={sl}&dl={dl}&text={text}')
     data = res.json()
     data_lang = lagn.json()
-    print('\n'.join(data['translations']['possible-translations']))
-    pprint.pprint(data_lang)
+    result = '\n'.join(data['translations']['possible-translations'])
+    return result
+
 

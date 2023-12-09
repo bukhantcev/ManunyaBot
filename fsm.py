@@ -9,4 +9,7 @@ class NewItem(StatesGroup):
     sklad = State()
     sklad_vidacha = State()
     sklad_delete = State()
+    translated_sl = State()
+    translated_dl = State()
+    translated_text = State()
 
