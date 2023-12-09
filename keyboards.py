@@ -27,7 +27,10 @@ kb_vidacha = InlineKeyboardMarkup(row_width=1, inline_keyboard=vidacha)
 
 bt_translated = [
     [InlineKeyboardButton(text='Русский', callback_data='ru'), InlineKeyboardButton(text='Русский', callback_data='ru_trg')],
-    [InlineKeyboardButton(text='Английский', callback_data='en'), InlineKeyboardButton(text='Английский', callback_data='en_trg')]
+    [InlineKeyboardButton(text='Английский', callback_data='en'), InlineKeyboardButton(text='Английский', callback_data='en_trg')],
+    [InlineKeyboardButton(text='Французский', callback_data='fr'), InlineKeyboardButton(text='Французский', callback_data='fr_trg')],
+    [InlineKeyboardButton(text='Немецкий', callback_data='de'), InlineKeyboardButton(text='Немецкий', callback_data='de_trg')],
+    [InlineKeyboardButton(text='Йоруба', callback_data='yo'), InlineKeyboardButton(text='Йоруба', callback_data='yo_trg')]
 
 ]
 

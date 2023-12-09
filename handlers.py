@@ -72,6 +72,11 @@ async def send_stickers(message:Message, state: FSMContext):
         await message.answer('Что-куда?', reply_markup=kb_translated)
         await NewItem.translated_sl.set()
 
+    if 'привет' in message.text.lower() or 'хай' in message.text.lower() or 'всем добра' in message.text.lower() or 'всем бобра' in message.text.lower():
+        await message.answer('Привет!')
+
+
+
 
 
 
@@ -238,6 +243,13 @@ async def get_text(message:Message, state:FSMContext):
     text = message.text
     await message.answer(text=get_translator(sl, dl, text))
     await state.finish()
+
+
+@dp.message_handler(state='*')
+async def exit_all(message:Message, state:FSMContext):
+    if message.text.lower() == 'выход':
+        await state.finish()
+        await message.answer('Пока')
 
 
 
