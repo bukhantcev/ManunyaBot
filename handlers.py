@@ -74,12 +74,14 @@ async def send_stickers(message:Message, state: FSMContext):
         await message.answer('Что-куда?', reply_markup=kb_translated)
         await NewItem.translated_sl.set()
 
-    if 'привет' in message.text.lower() or 'хай' in message.text.lower() or 'всем добра' in message.text.lower() or 'всем бобра' in message.text.lower():
-        text_list = ["Привет", "Хеллоу", "Бамжур", "Салам", "Здрасьте", "Ола", "Шумбрат", "Барев", "Добрый"]
-        index = random.randint(0,len(text_list)-1)
-        text = text_list[index]
+    text_hi = ['привет', 'хай', 'всем добра', 'всем бобра', 'салют', 'здарова', 'бонжур', 'салам', 'шубрат', 'здорово']
+    for item in text_hi:
+        if item in message.text.lower():
+            text_list = ["Привет", "Хеллоу", "Бамжур", "Салам", "Здрасьте", "Ола", "Шумбрат", "Барев", "Добрый"]
+            index = random.randint(0,len(text_list)-1)
+            text = text_list[index]
 
-        await message.answer(text=text)
+            await message.answer(text=text)
 
     if 'help' in message.text.lower():
         await message.answer(text=text_help)
