@@ -95,6 +95,8 @@ async def send_stickers(message:Message, state: FSMContext):
     if 'добрый вечер' in message.text.lower():
         await message.answer('Добрый вечер')
 
+    if 'фейерверк' in message.text.lower():
+        await message.reply('Нормально здоровайся!')
 
 
 
