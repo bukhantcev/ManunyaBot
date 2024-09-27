@@ -42,17 +42,6 @@ async def get_file(cb: CallbackQuery):
 
 @dp.message_handler(state=None)
 async def send_stickers(message:Message, state: FSMContext):
-    if 'да' in message.text.lower() and 'конечно' in message.text.lower():
-        sticker = InputFile('stickers/da_konechno.jpg')
-        await message.answer_photo(photo=sticker)
-
-    if 'это моя работа' in message.text.lower():
-        sticker = InputFile('stickers/job.jpg')
-        await message.answer_photo(photo=sticker)
-
-    if 'бублик' in message.text.lower() or 'баблгам' in message.text.lower():
-        sticker = InputFile('stickers/bublik.jpg')
-        await message.answer_photo(photo=sticker)
 
     if message.text.lower() == 'погода':
         await message.answer('Где, бля?')
@@ -74,29 +63,9 @@ async def send_stickers(message:Message, state: FSMContext):
         await message.answer('Что-куда?', reply_markup=kb_translated)
         await NewItem.translated_sl.set()
 
-    text_hi = ['привет', 'хай', 'всем добра', 'всем бобра', 'салют', 'здарова', 'бонжур', 'салам', 'шубрат', 'здорово']
-    for item in text_hi:
-        if item in message.text.lower():
-            text_list = ["Привет", "Хеллоу", "Бамжур", "Салам", "Здрасьте", "Ола", "Шумбрат", "Барев", "Добрый"]
-            index = random.randint(0,len(text_list)-1)
-            text = text_list[index]
-
-            await message.answer(text=text)
-
     if 'help' in message.text.lower():
         await message.answer(text=text_help)
 
-    if 'доброе утро' in message.text.lower():
-        await message.answer('Доброе утро')
-
-    if 'добрый день' in message.text.lower():
-        await message.answer('Добрый день')
-
-    if 'добрый вечер' in message.text.lower():
-        await message.answer('Добрый вечер')
-
-    if 'фейерверк' in message.text.lower():
-        await message.reply('Нормально здоровайся!')
 
 
 
