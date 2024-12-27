@@ -12,6 +12,7 @@ from db_config import add_new_worker, get_list, update_list
 import asyncio
 from translated import get_translator
 from manual import text_help
+import requests
 
 
 
@@ -67,6 +68,11 @@ async def send_stickers(message:Message, state: FSMContext):
         await message.answer(text=text_help)
 
 
+    if message.text.lower() == 'чч':
+        url_text = 'http://api.forismatic.com/api/1.0/'
+        data = {'method': 'getQuote', 'format': 'text', 'lang': 'ru'}
+        citata = requests.post(url_text, data=data).text
+        await message.answer(citata)
 
 
 
