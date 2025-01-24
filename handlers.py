@@ -13,6 +13,7 @@ import asyncio
 from translated import get_translator
 from manual import text_help
 import requests
+from dip import set_dip_switches
 
 
 
@@ -74,6 +75,10 @@ async def send_stickers(message:Message, state: FSMContext):
         citata = requests.post(url_text, data=data).text
         await message.answer(citata)
 
+    if message.text.lower() == 'dip' or message.text.lower() == 'дип':
+        await message.answer('Пришли адрес!')
+        await NewItem.dip_switch.set()
+
 
 
     tg_id = message.from_user.id
@@ -89,6 +94,21 @@ async def send_pogoda(message:Message, state:FSMContext):
         await message.answer("В душе не ебу где это!!! Нормально напиши!")
     await state.finish()
 
+@dp.message_handler(state=NewItem.dip_switch)
+async def send_dip(message:Message, state:FSMContext):
+    if str(message.text).isdigit():
+        if int(message.text) <= 512:
+            try:
+                await message.answer(text=set_dip_switches(message.text))
+            except:
+                await message.answer("Нужно ввести корректный адрес")
+            await state.finish()
+        else:
+            await message.answer("Адрес не может быть больше 512")
+            await state.finish()
+    else:
+        await message.answer("Адрес должен состоять только из цифр")
+        await state.finish()
 
 @dp.message_handler(content_types=['photo', 'video', 'document', 'audio', 'voice'], state=NewItem.sklad)
 async def prinyat_na_sklad(message:Message, state: FSMContext):

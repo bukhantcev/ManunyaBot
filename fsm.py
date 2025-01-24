@@ -12,4 +12,5 @@ class NewItem(StatesGroup):
     translated_sl = State()
     translated_dl = State()
     translated_text = State()
+    dip_switch = State()
 
