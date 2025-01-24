@@ -99,7 +99,7 @@ async def send_dip(message:Message, state:FSMContext):
     if str(message.text).isdigit():
         if int(message.text) <= 512:
             try:
-                await message.answer(text=set_dip_switches(message.text))
+                await message.answer(text=set_dip_switches(int(message.text)))
             except:
                 await message.answer("Нужно ввести корректный адрес")
             await state.finish()
