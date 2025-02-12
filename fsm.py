@@ -13,4 +13,6 @@ class NewItem(StatesGroup):
     translated_dl = State()
     translated_text = State()
     dip_switch = State()
+    ai = State()
+    role = State()
 

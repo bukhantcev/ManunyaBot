@@ -15,6 +15,8 @@ from manual import text_help
 import requests
 from dip import set_dip_switches
 
+from ai import get_ai_response
+
 
 
 
@@ -79,6 +81,14 @@ async def send_stickers(message:Message, state: FSMContext):
         await message.answer('Пришли адрес!')
         await NewItem.dip_switch.set()
 
+    if "?!?" in message.text:
+        await message.answer('Спрашивай!')
+        if message.text == "?!?":
+            NewItem.role = "Умный помощник"
+        else:
+            NewItem.role = message.text[len("?!?"):].strip()
+        await NewItem.ai.set()
+
 
 
     tg_id = message.from_user.id
@@ -93,6 +103,30 @@ async def send_pogoda(message:Message, state:FSMContext):
     except:
         await message.answer("В душе не ебу где это!!! Нормально напиши!")
     await state.finish()
+
+@dp.message_handler(state=NewItem.ai)
+async def ai(message:Message, state:FSMContext):
+
+    data = await state.get_data()
+    print(data)
+    if NewItem.role == '':
+        role = 'Умный помощник'
+    else:
+        role = NewItem.role
+
+    print(NewItem.role)
+    messages = [{"role": "system", "content": role},
+                {"role": "user", "content": message.text},
+                ]
+
+    answer = get_ai_response(message.text, role=role, messages=messages)
+
+    await message.answer(answer)
+    await state.finish()
+
+
+
+
 
 @dp.message_handler(state=NewItem.dip_switch)
 async def send_dip(message:Message, state:FSMContext):
