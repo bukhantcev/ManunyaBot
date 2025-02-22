@@ -11,7 +11,7 @@ def get_ai_response(user_input, role:str, messages:list):
 
     try:
         # Отправляем запрос к OpenAI API
-        response = client.chat.completions.create(model="gpt-3.5-turbo",  # Используемая модель
+        response = client.chat.completions.create(model="gpt-4o",  # Используемая модель
         messages=messages,
         max_tokens=1000,  # Максимальное количество токенов в ответе
         temperature=0.7)
