@@ -58,6 +58,9 @@ async def send_stickers(message:Message, state: FSMContext):
         await message.answer('Присылай, сохраню, хули!')
         await NewItem.sklad.set()
 
+    if any(elem in message.text.lower() for elem in ('гармаш', 'гармаша', 'гармашу', 'гармашом', 'гармаше')) :
+        await message.answer('Гармаш пидор!')
+
     if message.text.lower() == 'выдай базу':
         await message.answer('Ты подергай, а я посмотрю!', reply_markup=kb_vidacha)
         await NewItem.sklad_vidacha.set()
