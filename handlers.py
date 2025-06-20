@@ -315,63 +315,63 @@ DOWNLOAD_DIR = "downloads"
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
 
-@dp.message_handler(content_types=ContentType.DOCUMENT)
-async def handle_pdf(message: Message):
-    """Скачивает PDF, отправляет имя и удаляет файл."""
-    if message.document.mime_type == "application/pdf":
-        file_info = await bot.get_file(message.document.file_id)
-        file_name = html.escape(message.document.file_name)  # Экранируем спецсимволы
-        file_path = os.path.join(DOWNLOAD_DIR, file_name)
+# @dp.message_handler(content_types=ContentType.DOCUMENT)
+# async def handle_pdf(message: Message):
+#     """Скачивает PDF, отправляет имя и удаляет файл."""
+#     if message.document.mime_type == "application/pdf":
+#         file_info = await bot.get_file(message.document.file_id)
+#         file_name = html.escape(message.document.file_name)  # Экранируем спецсимволы
+#         file_path = os.path.join(DOWNLOAD_DIR, file_name)
+#
+#         # Скачивание файла
+#         await bot.download_file(file_info.file_path, file_path)
+#
+#         # Отправка ответа
+#
+#         pdf_text = extract_text_from_pdf(f'{DOWNLOAD_DIR}/{file_name}')
+#         role = 'Проверка авиа и жд билетов'
+#         messages = [{"role": "system", "content": role},
+#                     {"role": "user", "content": f"{pdf_text} если это авиа или жд билет или маршрутная квитанция или посадочный талон напиши данные пассажира в формате: фио, дата рождения, номер документа, дата и время поездки, место отправления - место прибытия, вагон, место, если это не билет и не маршрутная квитанция и не посадочный талон пиши одно слово - ВИТЯ. Пиши коротко и ясно"},
+#                     ]
+#         answer = get_ai_response(message.text, role, messages)
+#         if answer.lower() != 'витя':
+#             await message.reply('Нашел билеты, читаю')
+#             await message.answer(answer)
+#         # Удаление файла
+#         if os.path.exists(file_path):
+#             os.remove(file_path)
 
-        # Скачивание файла
-        await bot.download_file(file_info.file_path, file_path)
 
-        # Отправка ответа
-
-        pdf_text = extract_text_from_pdf(f'{DOWNLOAD_DIR}/{file_name}')
-        role = 'Проверка авиа и жд билетов'
-        messages = [{"role": "system", "content": role},
-                    {"role": "user", "content": f"{pdf_text} если это авиа или жд билет или маршрутная квитанция или посадочный талон напиши данные пассажира в формате: фио, дата рождения, номер документа, дата и время поездки, место отправления - место прибытия, вагон, место, если это не билет и не маршрутная квитанция и не посадочный талон пиши одно слово - ВИТЯ. Пиши коротко и ясно"},
-                    ]
-        answer = get_ai_response(message.text, role, messages)
-        if answer.lower() != 'витя':
-            await message.reply('Нашел билеты, читаю')
-            await message.answer(answer)
-        # Удаление файла
-        if os.path.exists(file_path):
-            os.remove(file_path)
-
-
-@dp.message_handler(content_types=ContentType.PHOTO)
-async def handle_photo(message: Message):
-    """Скачивает фото, извлекает текст, отправляет в OpenAI, затем удаляет файл."""
-    photo = message.photo[-1]  # Берем фото с максимальным разрешением
-    file_info = await bot.get_file(photo.file_id)
-    file_name = f"{photo.file_id}.jpg"
-    file_path = os.path.join(DOWNLOAD_DIR, file_name)
-
-    # Скачивание файла
-    await bot.download_file(file_info.file_path, file_path)
-
-    # Извлечение текста с изображения
-    img = Image.open(file_path)
-    extracted_text = pytesseract.image_to_string(img, lang='rus+eng')
-
-    role = 'Проверка авиа и жд билетов'
-    messages = [
-        {"role": "system", "content": role},
-        {"role": "user",
-         "content": f"{extracted_text} если это авиа или жд билет или посадочный талон напиши данные пассажира в формате: фио, дата рождения, номер документа, дата и время поездки, место отправления - место прибытия, вагон, место, если это не билет пиши одно слово - ВИТЯ. Пиши коротко и ясно"},
-    ]
-    answer = get_ai_response(extracted_text, role, messages)
-
-    if answer.lower() != 'витя':
-        await message.reply('Нашел билеты, читаю')
-        await message.answer(answer)
-
-    # Удаление файла
-    if os.path.exists(file_path):
-        os.remove(file_path)
+# @dp.message_handler(content_types=ContentType.PHOTO)
+# async def handle_photo(message: Message):
+#     """Скачивает фото, извлекает текст, отправляет в OpenAI, затем удаляет файл."""
+#     photo = message.photo[-1]  # Берем фото с максимальным разрешением
+#     file_info = await bot.get_file(photo.file_id)
+#     file_name = f"{photo.file_id}.jpg"
+#     file_path = os.path.join(DOWNLOAD_DIR, file_name)
+#
+#     # Скачивание файла
+#     await bot.download_file(file_info.file_path, file_path)
+#
+#     # Извлечение текста с изображения
+#     img = Image.open(file_path)
+#     extracted_text = pytesseract.image_to_string(img, lang='rus+eng')
+#
+#     role = 'Проверка авиа и жд билетов'
+#     messages = [
+#         {"role": "system", "content": role},
+#         {"role": "user",
+#          "content": f"{extracted_text} если это авиа или жд билет или посадочный талон напиши данные пассажира в формате: фио, дата рождения, номер документа, дата и время поездки, место отправления - место прибытия, вагон, место, если это не билет пиши одно слово - ВИТЯ. Пиши коротко и ясно"},
+#     ]
+#     answer = get_ai_response(extracted_text, role, messages)
+#
+#     if answer.lower() != 'витя':
+#         await message.reply('Нашел билеты, читаю')
+#         await message.answer(answer)
+#
+#     # Удаление файла
+#     if os.path.exists(file_path):
+#         os.remove(file_path)
 
 
 
