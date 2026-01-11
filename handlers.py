@@ -49,6 +49,7 @@ async def get_file(cb: CallbackQuery):
 
 @dp.message_handler(state=None)
 async def send_stickers(message:Message, state: FSMContext):
+    print(message)
 
     if message.text.lower() == 'погода':
         await message.answer('Где, бля?')
