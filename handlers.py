@@ -23,11 +23,9 @@ from ai import get_ai_response
 
 
 @dp.message_handler()
-async def test(message: Message):
-    # печатает ВСЁ содержимое сообщения (как dict)
-    import json
-    print(json.dumps(message.to_python(), ensure_ascii=False, indent=2))
-    # print(message.to_python())
+async def test(message:Message):
+    print(message)
+
 
 @dp.message_handler(commands=['go'])
 async def go(message: Message):
