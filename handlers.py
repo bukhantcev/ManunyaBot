@@ -22,7 +22,9 @@ from ai import get_ai_response
 
 
 
-
+@dp.message_handler()
+async def test(message:Message):
+    print(message)
 
 @dp.message_handler(commands=['go'])
 async def go(message: Message):
@@ -49,7 +51,6 @@ async def get_file(cb: CallbackQuery):
 
 @dp.message_handler(state=None)
 async def send_stickers(message:Message, state: FSMContext):
-    print(message)
 
     if message.text.lower() == 'погода':
         await message.answer('Где, бля?')
